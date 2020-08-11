@@ -10,6 +10,7 @@ using Markdig.Helpers;
 using Markdig.Renderers.Html;
 using Markdig.Renderers.Html.Inlines;
 using Markdig.Syntax;
+using System.Text.RegularExpressions;
 
 namespace Markdig.Renderers
 {
@@ -204,7 +205,18 @@ namespace Markdig.Renderers
 
             if (BaseUrl != null && !Uri.TryCreate(content, UriKind.Absolute, out Uri _))
             {
-                content = new Uri(BaseUrl, content).AbsoluteUri;
+                if ((UseNonAsciiNoEscape) && (BaseUrl.Scheme == "file"))
+                {
+                    if (!(content.Contains(":"))) //relative file path
+                    {
+                        var f = BaseUrl.ToString(); // "file:///....../£.../fname.md"
+                        content = Regex.Replace(f, @"[^/]+$", content);
+                    } //else - content is ready
+                }
+                else
+                {
+                    content = new Uri(BaseUrl, content).AbsoluteUri;
+                }
             }
 
             if (LinkRewriter != null)
