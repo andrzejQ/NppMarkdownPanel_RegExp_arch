@@ -8,8 +8,29 @@ Plugin to preview Markdown files in Notepad++
 
 ### Current Version
 
-The current version is **0.7.1** it can be found [here](https://github.com/mohzy83/NppMarkdownPanel/releases)
+The current version **can be found [here](https://github.com/mohzy83/NppMarkdownPanel/releases)**.
 
+IMPORTANT! I decided to freeze the development of this branch with preprocessing the source text with regular expressions.
+
+The official current version as above is sufficient to watch [Jekyll kramdown](https://www.markdownguide.org/tools/jekyll/).
+
+1. kramdown `{: attributes list}` is well converted by [markdig + generic attributes](https://github.com/xoofx/markdig/blob/master/src/Markdig.Tests/Specs/GenericAttributesSpecs.md). Remember to put a space after `{:`
+
+2. Jekyll [Liquid templates](https://jekyllrb.com/docs/liquid/) are used e.g. in images `src`. Just put javascript code on your page that processes these templates - condition: you can't use spaces inside {{...}}. JS example:
+
+````js
+<script>
+
+// alert('{{site.baseurl}}'.substring(0,2)=='{'+'{'); 
+if ( '{{site.baseurl}}'.substring(0,2) == '{'+'{' ) { //i.e. if Liquid is not in use
+  var images = document.getElementsByTagName('img'); 
+  for(var i = 0; i < images.length; i++) {
+    images[i].src = images[i].src.replace('%7B%7Bsite.baseurl%7D%7D','..');
+  }
+}
+
+</script>
+````
 
 ## Prerequisites
 - .NET 4.5.2 or higher 
