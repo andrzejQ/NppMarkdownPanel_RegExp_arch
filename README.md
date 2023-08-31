@@ -10,26 +10,28 @@ Plugin to preview Markdown files in Notepad++
 
 The current version **can be found [here](https://github.com/mohzy83/NppMarkdownPanel/releases)**.
 
-IMPORTANT! I decided to freeze the development of this branch with preprocessing the source text with regular expressions.
+> [!IMPORTANT]  
+> I decided to freeze the development of this branch with preprocessing the source text with regular expressions.
 
-The official current version as above is sufficient to watch [Jekyll kramdown](https://www.markdownguide.org/tools/jekyll/).
+The official current version as above is sufficient to view [Jekyll kramdown](https://www.markdownguide.org/tools/jekyll/) in MarkdownPanel.
 
 1. kramdown `{: attributes list}` is well converted by [markdig + generic attributes](https://github.com/xoofx/markdig/blob/master/src/Markdig.Tests/Specs/GenericAttributesSpecs.md). Remember to put a space after `{:`
 
-2. Jekyll [Liquid templates](https://jekyllrb.com/docs/liquid/) are used e.g. in images `src`. Just put javascript code on your page that processes these templates - condition: you can't use spaces inside {{...}}. JS example:
+2. Jekyll [Liquid templates](https://jekyllrb.com/docs/liquid/) are used e.g. in images `src`. Simply place the JavaScript code that processes these templates in a non-jekyll environment. Condition - you cannot use spaces inside {{...}}:
 
 ````js
+<!-- {% unless jekyll.environment %} -->
 <script>
 
-// alert('{{site.baseurl}}'.substring(0,2)=='{'+'{'); 
-if ( '{{site.baseurl}}'.substring(0,2) == '{'+'{' ) { //i.e. if Liquid is not in use
-  var images = document.getElementsByTagName('img'); 
-  for(var i = 0; i < images.length; i++) {
+(function() {
+  const images = document.getElementsByTagName('img'); 
+  for(let i = 0; i < images.length; i++) {
     images[i].src = images[i].src.replace('%7B%7Bsite.baseurl%7D%7D','..');
-  }
-}
+  } //{{site.baseurl}} - without spaces!  
+})();
 
 </script>
+<!-- {% endunless %} -->
 ````
 
 ## Prerequisites
