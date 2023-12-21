@@ -76,7 +76,9 @@ namespace MarkdigWrapper
                     SetLineNoAttributeOnAllBlocks(childBlock as ContainerBlock);
                 }
                 var attributes = childBlock.GetAttributes();
-                attributes.Id = childBlock.Line.ToString();
+                //attributes.Id = childBlock.Line.ToString();
+                attributes.Id = childBlock.ToString().Replace("Markdig.Syntax.","").Replace("Block", "") + "_"+childBlock.Line.ToString(); 
+                //ex. "ListItem_1" instead of "1"
                 childBlock.SetAttributes(attributes);
             }
 
