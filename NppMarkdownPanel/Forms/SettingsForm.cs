@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NppMarkdownPanel.Entities;
+using System;
 using System.Windows.Forms;
 
 namespace NppMarkdownPanel.Forms
@@ -17,41 +11,32 @@ namespace NppMarkdownPanel.Forms
         public string CssDarkModeFileName { get; set; }
         public string HtmlFileName { get; set; }
         public bool ShowToolbar { get; set; }
-
-        public bool UseRegExp { get; set; }
-        public string RegExpFileName { get; set; }
-
         public string SupportedFileExt { get; set; }
         public bool AutoShowPanel { get; set; }
-
         public bool ShowStatusbar { get; set; }
 
-        public SettingsForm(int zoomLevel, string cssFileName, string htmlFileName, bool showToolbar, bool useRegExp, string regExpFileName, string cssDarkModeFileName, string supportedFileExt, bool autoShowPanel, bool showStatusbar)
+        public SettingsForm(Settings settings)
         {
-            ZoomLevel = zoomLevel;
-            CssFileName = cssFileName;
-            CssDarkModeFileName = cssDarkModeFileName;
-            HtmlFileName = htmlFileName;
-            ShowToolbar = showToolbar;
-            UseRegExp = useRegExp;
-            RegExpFileName = regExpFileName;
-            SupportedFileExt = supportedFileExt;
-            AutoShowPanel = autoShowPanel;
-            ShowStatusbar = showStatusbar;
+            ZoomLevel = settings.ZoomLevel;
+            CssFileName = settings.CssFileName;
+            CssDarkModeFileName = settings.CssDarkModeFileName;
+            HtmlFileName = settings.HtmlFileName;
+            ShowToolbar = settings.ShowToolbar;
+            SupportedFileExt = settings.SupportedFileExt;
+            AutoShowPanel = settings.AutoShowPanel;
+            ShowStatusbar = settings.ShowStatusbar;
 
             InitializeComponent();
 
-            trackBar1.Value = zoomLevel;
-            lblZoomValue.Text = $"{zoomLevel}%";
-            tbCssFile.Text = cssFileName;
-            tbDarkmodeCssFile.Text = cssDarkModeFileName;
-            tbHtmlFile.Text = htmlFileName;
-            cbShowToolbar.Checked = showToolbar;
-            cbUseRegExp.Checked = useRegExp;
-            tbRegExpFile.Text = RegExpFileName;
-            tbFileExt.Text = supportedFileExt;
-            cbAutoShowPanel.Checked = autoShowPanel;
-            cbShowStatusbar.Checked = showStatusbar;
+            trackBar1.Value = ZoomLevel;
+            lblZoomValue.Text = $"{ZoomLevel}%";
+            tbCssFile.Text = CssFileName;
+            tbDarkmodeCssFile.Text = CssDarkModeFileName;
+            tbHtmlFile.Text = HtmlFileName;
+            cbShowToolbar.Checked = ShowToolbar;
+            tbFileExt.Text = SupportedFileExt;
+            cbAutoShowPanel.Checked = AutoShowPanel;
+            cbShowStatusbar.Checked = ShowStatusbar;
         }
 
         private void trackBar1_ValueChanged(object sender, EventArgs e)
@@ -181,43 +166,9 @@ namespace NppMarkdownPanel.Forms
 
         #endregion
 
-
-        #region Use RegExp
-        private void cbUseRegExp_CheckedChanged(object sender, EventArgs e)
-        {
-            UseRegExp = cbUseRegExp.Checked;
-            tbRegExpFile.Enabled = UseRegExp;
-            btnChooseRegExp.Enabled = UseRegExp;
-            btnResetRegExp.Enabled = UseRegExp;
-        }
-
-        private void tbRegExpFile_TextChanged(object sender, EventArgs e)
-        {
-            RegExpFileName = tbRegExpFile.Text;
-        }
-        #endregion
-
-        private void btnResetRegExp_Click(object sender, EventArgs e)
-        {
-            tbRegExpFile.Text = MainResources.DefaultRegExpFile;
-        }
-
-        private void btnChooseRegExp_Click(object sender, EventArgs e)
-        {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
-            {
-                openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-                openFileDialog.RestoreDirectory = true;
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    RegExpFileName = openFileDialog.FileName;
-                    tbRegExpFile.Text = RegExpFileName;
-                }
-            }
-        }
         private void btnDefaultFileExt_Click(object sender, EventArgs e)
         {
-            tbFileExt.Text = MarkdownPanelController.DEFAULT_SUPPORTED_FILE_EXT;
+            tbFileExt.Text = Settings.DEFAULT_SUPPORTED_FILE_EXT;
         }
 
         private void tbFileExt_TextChanged(object sender, EventArgs e)

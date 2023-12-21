@@ -8,31 +8,8 @@ Plugin to preview Markdown files in Notepad++
 
 ### Current Version
 
-The current version **can be found [here](https://github.com/mohzy83/NppMarkdownPanel/releases)**.
+The current version is **0.7.3** it can be found [here](https://github.com/mohzy83/NppMarkdownPanel/releases)
 
-> [!IMPORTANT]  
-> I decided to freeze the development of this branch with preprocessing the source text with regular expressions.
-
-The official current version as above is sufficient to view [Jekyll kramdown](https://www.markdownguide.org/tools/jekyll/) in MarkdownPanel.
-
-1. kramdown `{: attributes list}` is well converted by [markdig + generic attributes](https://github.com/xoofx/markdig/blob/master/src/Markdig.Tests/Specs/GenericAttributesSpecs.md). Remember to put a space after `{:`
-
-2. Jekyll [Liquid templates](https://jekyllrb.com/docs/liquid/) are used e.g. in images `src`. Simply place the JavaScript code that processes these templates in a non-jekyll environment. Condition - you cannot use spaces inside {{...}}:
-
-````js
-<!-- {% unless jekyll.environment %} -->
-<script>
-
-(function() {
-  const images = document.getElementsByTagName('img'); 
-  for(let i = 0; i < images.length; i++) {
-    images[i].src = images[i].src.replace('%7B%7Bsite.baseurl%7D%7D','..');
-  } //{{site.baseurl}} - without spaces!  
-})();
-
-</script>
-<!-- {% endunless %} -->
-````
 
 ## Prerequisites
 - .NET 4.5.2 or higher 
@@ -64,10 +41,9 @@ With dark mode enabled in Notepad++:
 
 ### Settings
 
-To open the settings for this plugin: Plugins -> NppMarkdownPanel -> Settings
-![open-settings](help/open-settings.png "open settings dialog")
-![settings-panel](help/settings-panel.png "settings panel")
- 
+To open the settings for this plugin: Plugins -> MarkdownPanel -> Settings
+![npp-settings](help/open-settings.png "open settings dialog")
+
 * #### CSS File
     This allows you to select a CSS file to use if you don't want the default style of the preview
 	
@@ -81,20 +57,6 @@ To open the settings for this plugin: Plugins -> NppMarkdownPanel -> Settings
 * #### Automatic HTML Output
     This allows you to select a file to save the rendered HTML to every time the preview is rendered. This is a way to automatically save the rendered content to use elsewhere. Leaving this empty disables the automatic saving.  
     __Note: This is a global setting, so all previewed documents will save to the same file.__
-
-* #### Regular Expression correction
-    Npp text source can be replaced using RegExp. See "RegExp3.txt" below for configuration for [Jekyll kramdown](https://www.markdownguide.org/tools/jekyll/) corrections.  
-"**RegExp3.txt**" should have 3-lines each: Comment (ignored), Pattern, ReplacementPattern for [RegExp](https://docs.microsoft.com/dotnet/standard/base-types/regular-expression-language-quick-reference). In ReplacementPattern `\r`,`\n`,`\t` can be used.  
-Config. file "RegExp3.txt" can be placed in folder of current `*.md` file or in Notepad++\plugins\NppMarkdownPanel\ folder. Full file name with path is also accepted (contains `:`).  
-Example:{font-size:small}  
-````cs
-	// Comment: {{ site.baseurl }} -> ..
-\{\{ site\.baseurl \}\}
-..
-	// ...{:style -> ...{style
-(\S\{):
-$1
-````  
 
 * #### Supported File Extensions
     This allows you to define a list of file extensions, which are supported and displayed in Markdown Panel.
@@ -120,7 +82,7 @@ $1
 
 ### Synchronize viewer with caret position
 
-Enabling this in the plugin's menu (Plugins -> NppMarkdownPanel) makes the preview panel stay in sync with the caret in the markdown document that is being edited.  
+Enabling this in the plugin's menu (Plugins -> MarkdownPanel) makes the preview panel stay in sync with the caret in the markdown document that is being edited.  
 This is similar to the _Synchronize Vertical Scrolling_ option of Notepad++ for keeping two open editing panels scrolling together.
 
 ### Synchronize with first visible line in editor
@@ -129,8 +91,28 @@ When this option is enabled, the plugin ensures that the first visible line in t
 editor is also visible in the preview. (This is an alternative to _Synchronize viewer with caret position_)
 
 ## Version History
-
-### Version 0.7.2 (released ...)
+### Version 0.7.3 (released 2023-02-12)
+- bug fixes
+	- Settings file NppMarkdownPanel.ini isn't used anymore #78
+	- Plugin release v0.7.2 searches help files in wrong directory #76
+	
+### Version 0.7.2 (released 2023-02-11)
+- bug fixes
+	- Display images with Url-encoded space character (%20) in the filename (contributed by [andrzejQ](https://github.com/andrzejQ) ) #39
+- features
+	- Plugin-Menu entry renamed to **MarkdownPanel**
+	- Syntax highlighting is now controlled by CSS Styles. See `style.css` and `style-dark.css` after comment `/* Syntax Highlighting */` #71
+	- Feature to preprocess markdown files before they are send to the converter. Furthermore it's possible to postprocess the generated html files (created by markdig). 
+	To enable this feature it's necessary to configure pre/post-processor commands (can be any commandline program) in the config file `plugins/Config/NppMarkdownPanel.ini`.
+	The placeholders `%inputfile%` and `%outputfile%` have to be set in the commandline and will be resolved at runtime (with temporary file names).
+	An example C# commandline-project can be found under: `misc\PPExtensions\MdpPrePostprocessorTemplate.sln`
+```
+[Options]
+PreProcessorExe=C:\temp\preprocessor.exe
+PreProcessorArguments=%inputfile% %outputfile%
+PostProcessorExe=C:\temp\preprocessor\postprocessor.exe
+PostProcessorArguments=%inputfile% %outputfile%
+```
 
 ### Version 0.7.1 (released 2022-12-27)
 
@@ -213,7 +195,7 @@ The plugin uses portions of nea's **MarkdownViewerPlusPlus** Plugin code - [http
 
 Thanks to the contributors: 
 
-[vinsworldcom](https://github.com/vinsworldcom), [rdipardo](https://github.com/rdipardo),
+[vinsworldcom](https://github.com/vinsworldcom), [rdipardo](https://github.com/rdipardo), [andrzejQ](https://github.com/andrzejQ),
 [RicoP](https://github.com/RicoP), [UrsineRaven](https://github.com/UrsineRaven) and
 [eeucalyptus](https://github.com/eeucalyptus)
 

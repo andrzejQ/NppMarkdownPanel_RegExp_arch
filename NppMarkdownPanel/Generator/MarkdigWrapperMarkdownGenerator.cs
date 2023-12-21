@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace NppMarkdownPanel
+namespace NppMarkdownPanel.Generator
 {
     /*
      * This generator is using reflection to load markdig wrapper assembly at runtime and
@@ -26,7 +26,7 @@ namespace NppMarkdownPanel
             var wrapperDllPath = "";
             try
             {
-                var currentPluginPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                var currentPluginPath = Utils.GetDirectoryOfExecutingAssembly();
                 wrapperDllPath = Path.Combine(currentPluginPath, "lib", "MarkdigWrapper.dll");
                 // References to other assemblies dont work in NPP ->
                 // load Assembly using reflection from subdir npp/plugins/NppMarkdownPanel/lib/MarkdigWrapper.dll

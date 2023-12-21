@@ -1,6 +1,0 @@
-	>>> Comment: {{ site.baseurl }} -> ..
-\{\{ site\.baseurl \}\}
-..
-	>>> ...{:style -> ...{style
-(\S\{):
-$1
