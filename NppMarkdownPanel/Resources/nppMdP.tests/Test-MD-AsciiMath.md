@@ -12,7 +12,7 @@ $$ sum_(k=1)^n k = 1+2+ cdots +n=(n(n+1)) / 2 $$ _ _ _ $$ f'(x) = dy/dx =\$100 $
 
 <span style="color:red">\$ab = cd$</span> - if two `$` appears in the same line disable `$...$` with `<span>` without class `kdmath` (for Jekyll) and use first `\$` (for N++ MdPanel).
 
-$$ int_0^oo (x^3)/(e^x-1) dx = (pi^4)/(15) $${:style="display:block;text-align:center;"}
+$$ int_0^oo (x^3)/(e^x-1) dx = (pi^4)/(15) $${: style="display:block;text-align:center;"}
 
 $$ ( a bc\ d ) \ \  [[a,b],[c,d]] $$
 
